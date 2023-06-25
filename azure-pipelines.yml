@@ -19,11 +19,11 @@ stages:
          terraform init
        displayName: 'Terraform init'
      - script: |
-         terraform plan -out=appservice.tfplan
+         terraform plan -out=appresources.tfplan
        displayName: 'Terraform Plan'
      - script: |
          terraform refresh      
        displayName: 'Terraform Refresh'
      - script: |
-         terraform apply appservice.tfplan
+         terraform apply appresources.tfplan
        displayName: 'Terraform Apply'
