@@ -15,7 +15,6 @@ stages:
        displayName: "Install Terraform"
        inputs:
          terraformVersion: '3.0.2'
-         terraformDownloadLocation: 'https://releases.hashicorp.com/terraform'
      - script: |
          terraform init
        displayName: 'Terraform init'
