@@ -3,8 +3,8 @@ trigger:
 
 
 stages:
- - stage: Prepare_Terraform
-   displayName: "Prepare Terraform"
+ - stage: Prepare_Deploy_Terraform_IaC
+   displayName: "Prepare and Deploy Terraform IaC"
    jobs:
    - job: Prepare_Terraform
      pool:
@@ -21,37 +21,6 @@ stages:
      - script: |
          terraform plan -out=appservice.tfplan
        displayName: 'Terraform Plan'
-     - task: PublishBuildArtifacts@1
-       inputs:
-        pathtoPublish: '$(Build.ArtifactStagingDirectory)/appservice.tfplan'
-        artifactName: 'terraformPlan'
-        publishLocation: 'Container'
-
-
- - stage: Deploy
-   jobs:
-   - job: Deploy
-     pool:
-       name: pkaan-selfhost-pool
-       vmImage: ubuntu-latest
-     continueOnError: false
-     steps:
-     - task: DownloadPipelineArtifact@2
-       displayName: 'Download Terraform Plan'
-       inputs:
-         buildType: specific
-         buildVersionToDownload: 'latest'
-         project: 'PKAAN'
-         definition: 'Terraform Plan'
-         artifactName: 'terraformPlan'
-         path: '$(Pipeline.Workspace)'
-     - task: TerraformInstaller@0
-       displayName: "Install Terraform"
-       inputs:
-         terraformVersion: 'latest'
-     - script: |
-         terraform init
-       displayName: 'Terraform init'
      - script: |
          terraform apply $(Pipeline.Workspace)/appservice.tfplan
        displayName: 'Terraform Apply'
