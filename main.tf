@@ -37,13 +37,37 @@ resource "azurerm_service_plan" "appserviceplan" {
 
 # Create the web app, pass in the App Service Plan ID
 resource "azurerm_windows_web_app" "webapp" {
-  name                  = "webapp-pkaan-terraform"
-  location              = azurerm_resource_group.rg.location
-  resource_group_name   = azurerm_resource_group.rg.name
-  service_plan_id       = azurerm_service_plan.appserviceplan.id
-  https_only            = true
-  site_config { 
+  name                = "webapp-pkaan-terraform"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  service_plan_id     = azurerm_service_plan.appserviceplan.id
+  https_only          = true
+
+  site_config {
     minimum_tls_version = "1.2"
-    always_on = false
+    always_on           = false
+
+
+    application_stack {
+      current_stack  = "node"
+      node_version = "16-LTS"
+    }
+
+    virtual_application {
+      physical_path = "site\\wwwroot"
+      preload       = false
+      virtual_path  = "/"
+      virtual_directory {
+        physical_path = "site\\wwwroot"
+        virtual_path  = "/welcome"
+      }
+    }
+  }
+    app_settings = {
+    WEBSITE_NODE_DEFAULT_VERSION = "~16"
+    SCM_DO_BUILD_DURING_DEPLOYMENT = true
+    WEBSITE_RUN_FROM_PACKAGE = 1
   }
 }
+
+
