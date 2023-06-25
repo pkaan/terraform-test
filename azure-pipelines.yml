@@ -23,10 +23,10 @@ stages:
          terraform plan -out=appservice.tfplan
        displayName: 'Terraform Plan'
      - task: PublishBuildArtifacts@1
-     inputs:
-       pathtoPublish: '$(Build.SourcesDirectory)/appservice.tfplan'
-       artifactName: 'terraformPlan'
-       publishLocation: 'Container'
+       inputs:
+        pathtoPublish: '$(Build.SourcesDirectory)/appservice.tfplan'
+        artifactName: 'terraformPlan'
+        publishLocation: 'Container'
 
 
  - stage: Deploy
