@@ -22,8 +22,8 @@ stages:
          terraform plan -out=appservice.tfplan
        displayName: 'Terraform Plan'
      - script: |
-         terraform import azurerm_resource_group.rg /subscriptions/4b9c23f1-02d5-4863-9c82-9fa1098c566d/resourceGroups/pkaan_terraform_group
-       displayName: 'Terraform State'
+         terraform refresh      
+       displayName: 'Terraform Refresh'
      - script: |
          terraform apply appservice.tfplan
        displayName: 'Terraform Apply'
