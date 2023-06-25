@@ -1,0 +1,59 @@
+trigger:
+- none
+
+
+stages:
+ - stage: Prepare_Terraform
+   displayName: "Prepare Terraform"
+   jobs:
+   - job: Prepare_Terraform
+     pool:
+       name: pkaan-selfhost-pool
+       vmImage: ubuntu-latest
+     steps:
+     - task: TerraformInstaller@0
+       displayName: "Install Terraform"
+       inputs:
+         terraformVersion: '3.0.2'
+         terraformDownloadLocation: 'https://releases.hashicorp.com/terraform'
+     - script: |
+         terraform init
+       displayName: 'Terraform init'
+     - script: |
+         terraform plan -out=appservice.tfplan
+       displayName: 'Terraform Plan'
+     - task: PublishBuildArtifacts@1
+     inputs:
+       pathtoPublish: '$(Build.SourcesDirectory)/appservice.tfplan'
+       artifactName: 'terraformPlan'
+       publishLocation: 'Container'
+
+
+ - stage: Deploy
+   jobs:
+   - job: Deploy
+     pool:
+       name: pkaan-selfhost-pool
+       vmImage: ubuntu-latest
+     continueOnError: false
+     steps:
+     - task: DownloadPipelineArtifact@2
+       displayName: 'Download Terraform Plan'
+       inputs:
+         buildType: specific
+         buildVersionToDownload: 'latest'
+         project: 'PKAAN'
+         definition: 'Terraform Plan'
+         artifactName: 'terraformPlan'
+         path: '$(Pipeline.Workspace)'
+     - task: TerraformInstaller@0
+       displayName: "Install Terraform"
+       inputs:
+         terraformVersion: '3.0.2'
+         terraformDownloadLocation: 'https://releases.hashicorp.com/terraform'
+     - script: |
+         terraform init
+       displayName: 'Terraform init'
+     - script: |
+         terraform apply $(Pipeline.Workspace)/appservice.tfplan
+       displayName: 'Terraform Apply'
