@@ -22,5 +22,5 @@ stages:
          terraform plan -out=appservice.tfplan
        displayName: 'Terraform Plan'
      - script: |
-         terraform apply $(Pipeline.Workspace)/appservice.tfplan
+         terraform apply appservice.tfplan
        displayName: 'Terraform Apply'
