@@ -23,7 +23,7 @@ stages:
        displayName: 'Terraform Plan'
      - task: PublishBuildArtifacts@1
        inputs:
-        pathtoPublish: '$(Build.SourcesDirectory)/appservice.tfplan'
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)/appservice.tfplan'
         artifactName: 'terraformPlan'
         publishLocation: 'Container'
 
@@ -48,8 +48,7 @@ stages:
      - task: TerraformInstaller@0
        displayName: "Install Terraform"
        inputs:
-         terraformVersion: '3.0.2'
-         terraformDownloadLocation: 'https://releases.hashicorp.com/terraform'
+         terraformVersion: 'latest'
      - script: |
          terraform init
        displayName: 'Terraform init'
