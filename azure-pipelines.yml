@@ -3,10 +3,10 @@ trigger:
 
 
 stages:
- - stage: Prepare_Deploy_Terraform_IaC
+ - stage: Deploy_Terraform_IaC
    displayName: "Prepare and Deploy Terraform IaC"
    jobs:
-   - job: Prepare_Terraform
+   - job: Deploy_Terraform
      pool:
        name: pkaan-selfhost-pool
        vmImage: ubuntu-latest
@@ -20,6 +20,6 @@ stages:
        displayName: 'Terraform init'
      - script: |
          terraform plan -out=appresources.tfplan
-         rerraform refresh
+         terraform refresh
          terraform apply appresources.tfplan
        displayName: 'Terraform Plan & Apply'
