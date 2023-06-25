@@ -19,7 +19,7 @@ stages:
          terraform init
        displayName: 'Terraform init'
      - script: |
-         rm appresources.tfplan
+         terraform import azurerm_resource_group.rg /subscriptions/4b9c23f1-02d5-4863-9c82-9fa1098c566d/resourceGroups/pkaan_terraform_group
          terraform plan -out=appresources.tfplan
          terraform refresh
          terraform apply appresources.tfplan
