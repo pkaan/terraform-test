@@ -69,5 +69,3 @@ resource "azurerm_windows_web_app" "webapp" {
     WEBSITE_RUN_FROM_PACKAGE = 1
   }
 }
-
-
