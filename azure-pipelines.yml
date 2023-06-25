@@ -19,6 +19,7 @@ stages:
          terraform init
        displayName: 'Terraform init'
      - script: |
+         rm appresources.tfplan
          terraform plan -out=appresources.tfplan
          terraform refresh
          terraform apply appresources.tfplan
